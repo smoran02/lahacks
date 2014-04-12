@@ -8,7 +8,10 @@ var alchemy = new AlchemyAPI('b03910ecf00dceb5040c7ffbb61be5a1cf856aba');
 
 
 exports.index = function(req, res){
-  res.render('index', { title: 'Express' });
+	sentiment.find({}).sort('-date').limit(10).exec(function(err, sents){
+		console.log(sents);
+		res.render('index.ejs', { data: sents });
+	});
 };
 
 exports.feedback = function(req, res){
