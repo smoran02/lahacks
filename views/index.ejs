@@ -29,10 +29,9 @@
 		<p><%= sentiments %></p>
 	<div class="col-md-7 centered">
 	<ul id="blah" class="newsticker" style="height:240px; overflow:hidden; display:block;">
-		<li>IainTheMainNigga IainTheMainNigga IainTheMainNigga IainTheMainNigga IainTheMainNigga</li>
-		<li>TheMainNiggaIain TheMainNiggaIain TheMainNiggaIain TheMainNiggaIain TheMainNiggaIain</li>
-		<li>MainNiggaIainThe MainNiggaIainThe MainNiggaIainThe MainNiggaIainThe MainNiggaIainThe</li>
-		<li>NiggaIainTheMain NiggaIainTheMain NiggaIainTheMain NiggaIainTheMain NiggaIainTheMain</li>
+		<% sentiments.forEach(function(sent){ %>
+		<li><%= sent.text %></li>
+		<% }); %>
 	</ul>
 	</div>
 	</div>
