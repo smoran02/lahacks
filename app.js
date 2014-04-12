@@ -1,8 +1,3 @@
-
-/**
- * Module dependencies.
- */
-
 var express = require('express');
 var user = require('./routes/user');
 var http = require('http');
@@ -22,6 +17,7 @@ mongoose.connect(uristring, function (err, res) {
   }
 });
 require('./models/feedback')(mongoose);
+require('./models/sentiment')(mongoose);
 var routes = require('./routes');
 var app = express();
 
