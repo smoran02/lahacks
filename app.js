@@ -59,9 +59,9 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', routes.index);
-app.get('/users', user.list);
+app.post('/', routes.feedback);
 
-app.post('/feedback', routes.feedback);
+app.get('/users', user.list);
 app.get('/sentiment', routes.sentiment);
 
 app.post("/event_name", function(req, res){
