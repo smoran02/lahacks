@@ -12,12 +12,17 @@ exports.index = function(req, res){
 };
 
 exports.feedback = function(req, res){
-	var fb = new feedback({
-		body: req.body.Body,
-		timestamp: Date.now()
-	});
-	fb.save(function(err, docs){
-		console.log(err);
+	alchemy.keywords(req.body.Body, {sentiment: 1}, function(err, response){
+		if (!err){
+			var sent = new sentiment({
+				text: req.body.Body,
+				timestamp: Date.now(),
+				keywords: response.keywords
+			});
+			sent.save(function(err, docs){
+				console.log(err);
+			});
+		}
 	});
 }
 
