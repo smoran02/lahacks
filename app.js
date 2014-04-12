@@ -4,6 +4,22 @@
  */
 
 var express = require('express');
+var mongoose = require('mongoose');
+var uristring =
+process.env.MONGOLAB_URI ||
+process.env.MONGOHQ_URL ||
+'mongodb://localhost/test';
+
+mongoose.connect(uristring, function (err, res) {
+  if (err) {
+  console.log ('ERROR connecting to: ' + uristring + '. ' + err);
+  } else {
+  console.log ('Succeeded connected to: ' + uristring);
+  }
+});
+require('./models/feedback')(mongoose);
+
+
 var routes = require('./routes');
 var user = require('./routes/user');
 var http = require('http');
@@ -24,6 +40,8 @@ var access_token_key = encodeURIComponent('ao4hRWSySVStN4fJoTi8g');
 var access_token_secret = encodeURIComponent('WhcBpUm30tvdsMffoWkTxh1GeuvRLAt0vsEQdJtTDs');
 var update_period = 10000;
 var tweets_per_call = 1;
+
+
 
 var app = express();
 
@@ -47,10 +65,7 @@ if ('development' == app.get('env')) {
 app.get('/', routes.index);
 app.get('/users', user.list);
 
-http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
-});
-
+app.post('/feedback', routes.feedback);
 
 app.post("/event_name", function(req, res){
 	var event_name = req.body.event_name;
@@ -61,7 +76,13 @@ app.post("/event_name", function(req, res){
 
 app.get("/", function(req, res){
 	res.render("index");
-})
+});
+
+http.createServer(app).listen(app.get('port'), function(){
+  console.log('Express server listening on port ' + app.get('port'));
+});
+
+
 
 var twitter_main = function(event_name, keyword_array){
   var oauth2 = new OAuth2(access_token_key, access_token_secret, 'https://api.twitter.com/', null, 'oauth2/token', null);
