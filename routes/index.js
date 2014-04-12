@@ -9,7 +9,7 @@ exports.index = function(req, res){
 exports.feedback = function(req, res){
 	var fb = new feedback({
 		body: req.body.Body,
-		timestamp: req.body.date_sent
+		timestamp: Date.now()
 	});
 	fb.save(function(err, docs){
 		console.log(err);
