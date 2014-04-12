@@ -29,6 +29,7 @@ exports.sentiment = function(req, res){
 					console.log(response);
 					var sent = new sentiment({
 						text: fb.body,
+						timestamp: fb.timestamp,
 						keywords: response.keywords
 					});
 					sent.save(function(err, docs){
