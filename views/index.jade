@@ -3,3 +3,14 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}
+  form(action = "/event_name", method = "post")
+    label(for = "event_name") Event Name
+    br  
+    input(type = "text" name = "event_name" id = "event_name")
+    br
+    label(for = "keywords") Keywords
+    br    
+    input(type = "text" name = "keywords" id = "keywords")
+    br
+    input(type = "submit") 
+
