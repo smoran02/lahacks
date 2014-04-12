@@ -1,6 +1,5 @@
 var twilio = require('twilio');
 var mongoose = require('mongoose');
-
 var sentiment = mongoose.model('Sentiment');
 var feedback = mongoose.model('Feedback');
 var AlchemyAPI = require('alchemy-api');
@@ -15,7 +14,21 @@ exports.index = function(req, res){
 };
 
 exports.feedback = function(req, res){
-	console.log(req.body);
+	alchemy.keywords(req.body.Body, {sentiment: 1}, function(err, response){
+		if (!err){
+			var sent = new sentiment({
+				text: req.body.Body,
+				timestamp: Date.now(),
+				keywords: response.keywords
+			});
+			sent.save(function(err, docs){
+				console.log(err);
+			});
+		}
+	});
+}
+
+exports.fake = function(req, res){
 	alchemy.keywords(req.body.Body, {sentiment: 1}, function(err, response){
 		if (!err){
 			var sent = new sentiment({

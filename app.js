@@ -60,6 +60,7 @@ if ('development' == app.get('env')) {
 
 app.get('/', routes.index);
 app.post('/', routes.feedback);
+app.post('/fake', routes.fake);
 
 app.get('/users', user.list);
 app.get('/sentiment', routes.sentiment);
@@ -75,8 +76,6 @@ http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
 
-
-
 var twitter_main = function(event_name, keyword_array){
   var oauth2 = new OAuth2(access_token_key, access_token_secret, 'https://api.twitter.com/', null, 'oauth2/token', null);
   oauth2.getOAuthAccessToken('',
@@ -89,7 +88,6 @@ var twitter_main = function(event_name, keyword_array){
     }
   );
 }
-
 
 var search_tweets = function(event_name, keyword_array){
   var query = encodeURIComponent(event_name);
@@ -122,9 +120,7 @@ var search_tweets = function(event_name, keyword_array){
    		console.log("Time: "+time+" Content: "+tweet.text);
    		//post_sentiment(content, time);
       }
-
     });    
-
   });
 }
 
@@ -141,6 +137,4 @@ var post_sentiment = function(text, time, from_twitter){
 	else{
 		mongoose.post(text, time, true);
 	}
-
 }
-
