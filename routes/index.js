@@ -26,8 +26,9 @@ exports.sentiment = function(req, res){
 		feedbacks.forEach(function(fb){
 			alchemy.keywords(fb.body, {sentiment: 1}, function(err, response){
 				if (!err){
+					console.log(response);
 					var sent = new sentiment({
-						text: response.text,
+						text: fb.body,
 						keywords: response.keywords
 					});
 					sent.save(function(err, docs){
