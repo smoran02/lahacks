@@ -1,7 +1,23 @@
 var twilio = require('twilio');
 var mongoose = require('mongoose');
-var feedback = mongoose.model('Feedback');
-var sentiment = mongoose.model('Sentiment');
+var uristring =
+process.env.MONGOLAB_URI ||
+process.env.MONGOHQ_URL ||
+'mongodb://localhost/test';
+
+mongoose.connect(uristring, function (err, res) {
+  if (err) {
+  console.log ('ERROR connecting to: ' + uristring + '. ' + err);
+  } else {
+  console.log ('Succeeded connected to: ' + uristring);
+  }
+});
+require('./models/sentiment')(mongoose);
+require('./models/feedback')(mongoose);
+var sentiment = mongoose.model("Sentiment");
+var feedback = mongoose.model("Feedback");
+var AlchemyAPI = require('alchemy-api');
+var alchemy = new AlchemyAPI('b03910ecf00dceb5040c7ffbb61be5a1cf856aba');
 
 
 exports.index = function(req, res){
@@ -18,17 +34,21 @@ exports.feedback = function(req, res){
 	});
 }
 
-
-	// feedback.find({}, function(err, feedbacks){
-	// 	feedbacks.forEach(function(fb){
-	// 		alchemyapi.keywords("text", fb, {sentiment:1}, function(response){
-	// 			var sent = new sentiment({
-	// 				text: response.text,
-	// 				keywords: response.keywords
-	// 			});
-	// 			sent.save(function(err, docs){
-	// 				console.log(err);
-	// 			});
-	// 		});
-	// 	});
-	// });
+exports.sentiment = function(req, res){
+	feedback.find({}, function(err, feedbacks){
+		feedbacks.forEach(function(fb){
+			alchemy.keywords(fb.body, {sentiment: 1}, function(err, response){
+				if (!err){
+					var sent = new sentiment({
+						text: response.text,
+						keywords: response.keywords
+					});
+					sent.save(function(err, docs){
+						console.log(err);
+					});
+				}
+			});
+		});
+	});
+	res.send('sentiment and shit');
+}
