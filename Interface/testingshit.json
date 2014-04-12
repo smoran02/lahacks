@@ -1,0 +1,6 @@
+var shit = {"comments": [
+        {"text": "Hadar needs to suck a dick", "tension-value": -0.8, "timestamp": "21:00:00"},
+        {"text": "Hadar should die", "tension-value": -1, "timestamp": "21:15:00"},
+        {"text": "I love Hadar!", "tension-value": 1, "timestamp": "21:30:00"}
+    ]
+}
