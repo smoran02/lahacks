@@ -8,7 +8,7 @@ var alchemy = new AlchemyAPI('b03910ecf00dceb5040c7ffbb61be5a1cf856aba');
 
 
 exports.index = function(req, res){
-	sentiment.find({}).sort('-date').limit(10).exec(function(err, sents){
+	sentiment.find({}).sort('+date').limit(10).exec(function(err, sents){
 		console.log(sents);
 		res.render('index.ejs', { sentiments: sents });
 	});
