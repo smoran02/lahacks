@@ -14,6 +14,7 @@ exports.index = function(req, res){
 
 exports.feedback = function(req, res){
 	alchemy.keywords(req.body.Body, {sentiment: 1}, function(err, response){
+		console.log(response);
 		if (!err){
 			var sent = new sentiment({
 				text: req.body.Body,
