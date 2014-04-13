@@ -1,0 +1,24 @@
+extends layout
+
+block content
+  script
+    
+    var data = !{JSON.stringify(data)};
+    var seriesArr = [];
+    var titleArr = [];
+      
+      for(x in data){
+        seriesArr.push({
+          name:x.text,
+          data:sentiment
+          });
+        seriesArr.push({
+          name:x + " avg",
+          data:keyword[x]
+          });
+      }
+    }
+  script(src="http://code.highcharts.com/highcharts.js")
+  script(src="charting.js")
+  #container
+    #graphContainer
