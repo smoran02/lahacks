@@ -24,7 +24,7 @@ exports.feedback = function(req, res){
 			sent.save(function(err, docs){
 				console.log(err);
 			});
-
+			
 			var twiml = new twilio.TwimlResponse();
 			twiml.message('Thanks! Your feedback has been recorded!');
 			res.type('text/xml');
@@ -34,21 +34,10 @@ exports.feedback = function(req, res){
 }
 
 exports.keyword = function(req, res){
-	sentiment.find(
-		{'keywords.text':
-			{'$regex': req.params.keyword, '$options': 'i'}},
-		{'keywords.text.$': 1}, function(err, sents){
-			res.send(sents);
-
-		// var data = [];
-		// sents.forEach(function(sent){
-		// 	var node = {
-		// 		timestamp: sent.timestamp,
-		// 		text: sent.text,
-		// 		keyword: 
-		// 	}
-		// 	data.push(node);
-		// });
+	sentiment.find({ 'keywords.text':
+			{'$regex': req.params.keyword, '$options': 'i'}
+		}, function(err, sents){
+		res.send(sents);
 	});
 }
 
