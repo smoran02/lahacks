@@ -46,7 +46,7 @@ var alchemy = new AlchemyAPI('b03910ecf00dceb5040c7ffbb61be5a1cf856aba');
 var bearer_token = null;
 var access_token_key = encodeURIComponent('ao4hRWSySVStN4fJoTi8g');
 var access_token_secret = encodeURIComponent('WhcBpUm30tvdsMffoWkTxh1GeuvRLAt0vsEQdJtTDs');
-var update_period = 1000;
+var update_period = 5000;
 var tweets_per_call = 3;
 var timeout = null;
 var old_tweets = [];
@@ -89,6 +89,9 @@ app.post("/event_name", function(req, res){
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
+
+  // Remove the call below to not start the twitter loop when the server starts
+  twitter_loop("LAHacks");
 });
 
 
