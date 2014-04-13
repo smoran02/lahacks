@@ -34,9 +34,16 @@ exports.feedback = function(req, res){
 }
 
 exports.keyword = function(req, res){
-	sentiment.find({ 'keywords.text':
-			{$regex: 'food', $options: 'i'}}, function(err, sents){
-				res.send(sents);
+	var regex = new RegExp(req.params.keyword, 'i')
+	sentiment.find(
+		{'keywords.text': regex},
+		{
+			'keywords': {'$elemMatch': {'text': regex}},
+			'text': true,
+			'timestamp': true
+		},
+		function(err, sents){
+			res.send(sents);
 	});
 }
 
