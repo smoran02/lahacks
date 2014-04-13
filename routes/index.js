@@ -8,7 +8,6 @@ var alchemy = new AlchemyAPI('b03910ecf00dceb5040c7ffbb61be5a1cf856aba');
 
 exports.index = function(req, res){
 	sentiment.find({}).sort('-timestamp').limit(10).exec(function(err, sents){
-		//console.log(sents);
 		res.render('index.ejs', { sentiments: sents });
 	});
 };
@@ -59,7 +58,7 @@ exports.keyword = function(req, res){
 				console.log(node);
 				data.push(node);
 			});
-			res.send(data);
+			res.render('chart.html', {data: data});
 	});
 }
 
