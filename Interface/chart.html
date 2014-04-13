@@ -15,8 +15,9 @@
 	<div id="container" style="width:80%; height:80%; margin:auto">
 		<script>
 			var seriesArr = [];
-			for (x in data){
-				console.log(x);
+			for (d in data){
+				name: d.text,
+				data: d.sentiment
 			}
 			var counter = 0;
 			var total = 0;
