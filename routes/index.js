@@ -47,10 +47,11 @@ exports.keyword = function(req, res){
 			sents.forEach(function(sent){
 				var rel = parseInt(sent.keywords.relevance, 10);
 				var s = parseInt(sent.keywords.sentiment, 10);
+				var product = rel * rel * s;
 				var node = {
 					text: sent.text,
 					timestamp: sent.timestamp,
-					sentiment: rel * rel * s
+					sentiment: product
 				}
 				console.log(node);
 				data.push(node);
