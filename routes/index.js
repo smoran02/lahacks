@@ -35,6 +35,7 @@ exports.feedback = function(req, res){
 
 exports.keyword = function(req, res){
 	var regex = new RegExp(req.params.keyword, 'i');
+	var data = [];
 	sentiment.find(
 		{'keywords.text': regex},
 		{
@@ -43,7 +44,6 @@ exports.keyword = function(req, res){
 			'timestamp': true
 		},
 		function(err, sents){
-			var data = [];
 			sents.forEach(function(sent){
 				var node = {
 					text: sent.text,
