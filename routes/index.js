@@ -43,6 +43,9 @@ exports.keyword = function(req, res){
 			'timestamp': true
 		},
 		function(err, sents){
+			var node = {
+				
+			}
 			res.send(sents);
 	});
 }
