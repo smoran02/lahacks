@@ -55,7 +55,6 @@ exports.keyword = function(req, res){
 					timestamp: sent.timestamp,
 					sentiment: product
 				}
-				console.log(node);
 				data.push(node);
 			});
 			res.render('chart.ejs', {data: data});

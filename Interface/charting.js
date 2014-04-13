@@ -259,3 +259,52 @@ Highcharts.theme = {
 // Apply the theme
 var highchartsOptions = Highcharts.setOptions(Highcharts.theme);
 
+var counter = 0;
+var total = 0;
+function average(sentiment){
+  total += sentiment;
+  counter += 1;
+  return total/counter;
+}
+$(function () {
+  var chart = new Highcharts.Chart({
+      chart: {
+        renderTo: 'graphContainer',
+        zoomType: 'x'
+      },
+      title: {
+            
+      },
+      subtitle: {
+        text: document.ontouchstart === undefined ?
+            'Click and drag in the plot area to zoom in' :
+            'Pinch the chart to zoom in'
+      },
+      xAxis: {
+        maxZoom: 600, // 1 minute
+        title: {
+            text: 'Time'
+        }
+      },
+      yAxis: {
+        title: {
+            text: 'Weighted Sentiment'
+        }
+      },
+      tooltip: {
+        shared: true,
+        formatter: function() {
+            return '<b>' + 'Time: ' + '</b>' + data[counter]['timestamp'] + '<br>' + '<b>' + 'Text: ' + '</b>'
+            + data[counter]['text'] + '<br>' + '<b>' + 'Sentiment: ' + '</b>' + data[counter]['sentiment'];
+        }
+      },
+      legend: {
+          enabled: true
+      },
+
+      series: seriesArr
+        // type: 'spline',
+        // pointStart: (new Date()).getTime(),
+        // pointInterval: 3000,
+  });
+});
