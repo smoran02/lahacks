@@ -266,10 +266,11 @@ function average(sentiment){
   counter += 1;
   return total/counter;
 }
+
 $(function () {
-  var chart = new Highcharts.Chart({
+  $('#graphContainer').highcharts({
       chart: {
-        renderTo: 'graphContainer',
+        type: 'line',
         zoomType: 'x'
       },
       title: {
