@@ -308,7 +308,7 @@ $(function () {
                 type: 'spline',
                 pointStart: (new Date()).getTime(),
                 pointInterval: 3000,
-,               data: [average(data[counter]['sentiment']), 0.3, 0, -1, 1]
+               data: [average(data[counter]['sentiment']), 0.3, 0, -1, 1]
 
             }]
         });
