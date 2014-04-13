@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 var sentiment = mongoose.model('Sentiment');
 var feedback = mongoose.model('Feedback');
 var AlchemyAPI = require('alchemy-api');
-var alchemy = new AlchemyAPI('b03910ecf00dceb5040c7ffbb61be5a1cf856aba');
+var alchemy = new AlchemyAPI('2094dd01fd7cbceb7e1bb916840e40e81f25d16f');
 
 
 exports.index = function(req, res){
