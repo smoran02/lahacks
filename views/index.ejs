@@ -1,5 +1,3 @@
-<!DOCTYPE HTML>
-<html lang = 'en'>  
 <head>
 	<meta charset='utf-8'>
 	<meta name='viewport' content='width=device-width, initial-scale=1.0'>
@@ -12,9 +10,9 @@
 		border-radius: 3px; -webkit-border-radius: 3px; -moz-border-radius: 3px;
 		}
 	</style>
-	
+
 </head>
-<body>
+<body onload="loadbg()">
 	<div class="navbar navbar-default navbar-fixed-top">
 		<div class="container">
 			<div class="navbar-header">
@@ -43,7 +41,7 @@
 		</div>
 	</div>
 
-	<div class="orange">
+	<div class="orange" id="thedivthing">
 		<div class="row">
 			<div class="col-md-6 col-md-push-3 centered">
 			<h3>Recent texts</h3>
@@ -68,8 +66,9 @@
 	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 	<script src="javascripts/jquery.curvycorners.min.js"></script>
 	<script src="javascripts/jquery.newsTicker.js"></script>
+	<script src="javascripts/jquery.backstretch.min.js"></script>
 	<script type="text/javascript">
-		$('.newsticker').newsTicker({ 
+		$('.newsticker').newsTicker ({ 
 			row_height: 200,
 		    max_rows: 2,
 		    speed: 3000,
@@ -78,6 +77,30 @@
 		    autostart: 1,
 		    pauseOnHover: 1
 		});
+		$(".orange").backstretch("images/pauley.jpg");
 	</script>
+	<script type="text/javascript">
+		function loadbg() {
+			var thing = document.getElementById("thedivthing");
+			thing.style.backgroundImage = 'url(images/pauley_cropped.jpg)';
+			thing.style.backgroundRepeat = "no-repeat";
+		}
+	</script>
+
+	<script>
+		$('#event_name_form').submit(function(event){
+			event.preventDefault();
+			var val = $('#event_name').val();
+			$.post('/event_name', {event_name : val}, function(data){
+				$('#event_name').css("background-color", "#D1D1D1").click(function(){
+					$('#event_name').css("background-color", "white");
+				});
+			});
+		});
+	</script>
+
+
 </body>
-</html>
+
+
+
