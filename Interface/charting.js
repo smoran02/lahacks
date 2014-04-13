@@ -1,12 +1,12 @@
 //goddamnit
 var counter = 0;
 var total = 0;
-var shit = [
-  {
-    "text": "Fuck da wifi",
-    "timestamp": "2014-04-12T10:44:39.180Z",
-    "sentiment": -0.6893254978901246
-  }];
+// var shit = [
+//   {
+//     "text": "Fuck da wifi",
+//     "timestamp": "2014-04-12T10:44:39.180Z",
+//     "sentiment": -0.6893254978901246
+//   }];
 
 function average(sentiment){
   total += sentiment;
@@ -296,8 +296,8 @@ $(function () {
             tooltip: {
                 shared: true,
                 formatter: function() {
-                    return '<b>' + 'Time: ' + '</b>' + shit[0]['timestamp'] + '<br>' + '<b>' + 'Text: ' + '</b>'
-                    + shit[0]['text'] + '<br>' + '<b>' + 'Sentiment: ' + '</b>' + shit[0]['sentiment'];
+                    return '<b>' + 'Time: ' + '</b>' + data[counter]['timestamp'] + '<br>' + '<b>' + 'Text: ' + '</b>'
+                    + data[counter]['text'] + '<br>' + '<b>' + 'Sentiment: ' + '</b>' + data[counter]['sentiment'];
                 }
             },
             legend: {
@@ -306,10 +306,8 @@ $(function () {
     
             series: [{
                 type: 'spline',
-                name: 'Hadar Dor',
                 pointStart: (new Date()).getTime(),
-                pointInterval: 5000
-,                data: [average(shit[counter]['sentiment']), 0.3, 0, -1, 1]
+,               data: [average(data[counter]['sentiment']), 0.3, 0, -1, 1]
 
             }]
         });
