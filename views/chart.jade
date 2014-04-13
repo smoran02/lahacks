@@ -7,7 +7,7 @@ block content
     var seriesArr = [];
     var titleArr = [];
       
-    for(x in data){
+    data.forEach(function(x){
       seriesArr.push({
         name:x.text,
         data:sentiment
