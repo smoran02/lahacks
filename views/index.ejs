@@ -42,7 +42,14 @@
 					<li><a href="#">Hadar</a></li>
 					</ul>
 				</li>
-				<li><a href="#">Search</a></li>
+				<li>
+					<form class="navbar-form navbar-left" role="search">
+					    <div class="form-group">
+					        <input type="text" class="form-control" placeholder="Search for keywords separated by commas" style="width: 350px">
+					    </div>
+					    
+					</form>
+				</li>
 				<!--
 				<li>
 					<form class="form-inline">
@@ -90,7 +97,6 @@
 							<%= key.sentiment.score %>
 							"
 						<% }); %> >
-
 						<%= sent.text %></a></li>
 					<% }); %>
 				</ul>
