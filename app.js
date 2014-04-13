@@ -75,7 +75,6 @@ if ('development' == app.get('env')) {
 app.get('/', routes.index);
 app.get('/users', user.list);
 app.get('/keyword/:keyword', routes.keyword);
-app.get('/chart', routes.chart);
 app.post('/', routes.feedback);
 
 app.post("/event_name", function(req, res){
