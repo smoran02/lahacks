@@ -53,7 +53,7 @@ exports.keyword = function(req, res){
 				console.log(node);
 				data.push(node);
 			});
-			res.send(sents);
+			res.send(data);
 	});
 }
 
