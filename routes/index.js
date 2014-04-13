@@ -45,10 +45,8 @@ exports.keyword = function(req, res){
 		},
 		function(err, sents){
 			sents.forEach(function(sent){
-				var rel = parseFloat(sent.keywords.relevance, 10);
-				var s = parseFloat(sent.keywords.sentiment, 10);
-				console.log("rel: " + rel);
-				console.log("s: " + s);
+				var rel = parseFloat(sent.keywords[0].relevance, 10);
+				var s = parseFloat(sent.keywords[0].sentiment.score, 10);
 				var product = rel * rel * s;
 				var node = {
 					text: sent.text,
