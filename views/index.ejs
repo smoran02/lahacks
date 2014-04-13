@@ -4,44 +4,80 @@
 	<meta charset='utf-8'>
 	<meta name='viewport' content='width=device-width, initial-scale=1.0'>
 	<title>kidbrezhi</title>
-	<link href="bootstrap.css" rel="stylesheet">
+	<link href="stylesheets/bootstrap.css" rel="stylesheet">
+	<link href="stylesheets/main.css" rel="stylesheet">
+	<link href="stylesheets/font-awesome.min.css" rel="stylesheet">
 	<style>
-		body {
-		font-family: "Lato";
-		font-weight: 300;
-		font-size: 16px;
-		color: #555;
-		-webkit-font-smoothing: antialiased;
-		}
-
-		#blah {
-			max-width: 620px;
-			margin:auto;
-			list-style:none;
+		.round {
+		border-radius: 3px; -webkit-border-radius: 3px; -moz-border-radius: 3px;
 		}
 	</style>
-
+	
 </head>
 <body>
-	<div class="green">
-	<div class="container">
-	<div class="row">
-		<p><%= sentiments %></p>
-	<div class="col-md-7 centered">
-	<ul id="blah" class="newsticker" style="height:240px; overflow:hidden; display:block;">
-		<% sentiments.forEach(function(sent){ %>
-		<li><%= sent.text %></li>
-		<% }); %>
-	</ul>
+	<div class="navbar navbar-default navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+			</div>
+
+			<div class="navbar-collapse collapse">
+	        <ul class="nav navbar-nav">
+				<li><a href="#">Texts</a></li>
+				<li><a href="#">Graphs</a></li>
+				<li><a href="#">Do something</a></li>
+			</ul>
+				<div class="round">
+		          <ul class="nav navbar-nav navbar-right">
+		            <li class="active">
+		            	<a href="#" style="background:#43CD80;">FBGM</a>
+		            </li>
+		          </ul>
+	      		</div>
+	        </div><!--/.nav-collapse -->
+
+		</div>
 	</div>
-	</div>
-	</div>
+
+	<div class="orange">
+		<div class="row">
+			<div class="col-md-6 col-md-push-3 centered">
+			<h3>Recent texts</h3>
+			</div>
+		</div>
+
+		<div class="container">
+		<div class="row">
+		<div class="col-md-6 col-md-push-3 centered">
+			<div id="nt-example1-container">
+               <ul id="nt-example1" class="newsticker" class="round">
+					<% sentiments.forEach(function(sent){ %>
+					<li><%= sent.text %></li>
+					<% }); %>
+				</ul>
+            </div>
+		</div>
+		</div>
+		</div>
 	</div>
 
 	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-	<script src="jquery.newsTicker.js"></script>
+	<script src="javascripts/jquery.curvycorners.min.js"></script>
+	<script src="javascripts/jquery.newsTicker.js"></script>
 	<script type="text/javascript">
-		$('.newsticker').newsTicker();
+		$('.newsticker').newsTicker({ 
+			row_height: 200,
+		    max_rows: 2,
+		    speed: 3000,
+		    direction: 'up',
+		    duration: 5000,
+		    autostart: 1,
+		    pauseOnHover: 1
+		});
 	</script>
 </body>
 </html>
