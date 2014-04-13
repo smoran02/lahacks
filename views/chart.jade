@@ -3,12 +3,12 @@ extends layout
 block content
   script.
     
-    //var data = !{JSON.stringify(data)};
+    var data = !{JSON.stringify(data)};
     var seriesArr = [];
     var titleArr = [];
     for(x in data){
       seriesArr.push({
-        name:x.text,
+        name:x,
         data:data[x]
       });
     }
