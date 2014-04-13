@@ -61,6 +61,7 @@ if ('development' == app.get('env')) {
 app.get('/', routes.index);
 app.post('/', routes.feedback);
 app.post('/fake', routes.fake);
+app.get('/keyword/:keyword', routes.keyword);
 
 app.get('/users', user.list);
 app.get('/sentiment', routes.sentiment);
