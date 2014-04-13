@@ -76,12 +76,14 @@ exports.sentiment = function(req, res){
 	feedback.find({}, function(err, feedbacks){
 		feedbacks.forEach(function(fb){
 			alchemy.keywords(fb.body, {sentiment: 1}, function(err, response){
+				var rel = parseInt(response.keywords.relevance, 10);
+				var sent = parseInt(response.keywords.sentiment, 10);
 				if (!err){
 					console.log(response);
 					var sent = new sentiment({
 						text: fb.body,
 						timestamp: fb.timestamp,
-						keywords: response.keywords
+						sentiment: rel * rel * sent
 					});
 					sent.save(function(err, docs){
 						console.log(err);
