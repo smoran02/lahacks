@@ -29,7 +29,7 @@ exports.feedback = function(req, res){
 }
 
 exports.keyword = function(req, res){
-	sentiment.find({ keywords.text: '/'+req.params.keyword+'/' }, function(err, sents){
+	sentiment.find({ keywords['text']: '/'+req.params.keyword+'/' }, function(err, sents){
 		res.send(sents);
 	});
 }
