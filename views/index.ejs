@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html lang = 'en'>
+<head>
+	<meta charset='utf-8'>
+	<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+	<title>kidbrezhi</title>
+	<link href="bootstrap.css" rel="stylesheet">
+	<style>
+		body {
+		font-family: "Lato";
+		font-weight: 300;
+		font-size: 16px;
+		color: #555;
+		-webkit-font-smoothing: antialiased;
+		}
+
+		#blah {
+			max-width: 620px;
+			margin:auto;
+			list-style:none;
+		}
+	</style>
+
+</head>
+<body>
+
+	<div id = "set_event_name">
+		<form action = "event_name" method = "POST" id = "event_name_form">
+			<label for = "event_name"> Event Name </label> <br/>
+			<input type = "text" name = "event_name" id = "event_name"/> <br/>
+			<input type = "submit"/>
+		</form>
+	</div>
+
+
+
+	<div class="green">
+	<div class="container">
+	<div class="row">
+		<p><%= sentiments %></p>
+	<div class="col-md-7 centered">
+	<ul id="blah" class="newsticker" style="height:240px; overflow:hidden; display:block;">
+		<% sentiments.forEach(function(sent){ %>
+		<li><%= sent.text %></li>
+		<% }); %>
+	</ul>
+	</div>
+	</div>
+	</div>
+	</div>
+
+	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+	<script src="jquery.newsTicker.js"></script>
+	<script>
+		$('#event_name_form').submit(function(event){
+			event.preventDefault();
+			var val = $('#event_name').val();
+			$.post('/event_name', {event_name : val}, function(data){
+				$('#event_name').css("background-color", "#D1D1D1").click(function(){
+					$('#event_name').css("background-color", "white");
+				});
+			});
+		});
+	</script>	
+	
+</body>
+</html>

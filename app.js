@@ -18,6 +18,8 @@ mongoose.connect(uristring, function (err, res) {
   }
 });
 require('./models/feedback')(mongoose);
+require('./models/sentiment')(mongoose);
+
 var feedback = mongoose.model('Feedback');
 
 
@@ -35,12 +37,17 @@ var twit = new twitter({
 var OAuth2 = require('oauth').OAuth2;
 var https = require('https');
 
+var sentiment = mongoose.model('Sentiment');
+var feedback = mongoose.model('Feedback');
+var AlchemyAPI = require('alchemy-api');
+var alchemy = new AlchemyAPI('b03910ecf00dceb5040c7ffbb61be5a1cf856aba');
+
 // Twitter Information
 var bearer_token = null;
 var access_token_key = encodeURIComponent('ao4hRWSySVStN4fJoTi8g');
 var access_token_secret = encodeURIComponent('WhcBpUm30tvdsMffoWkTxh1GeuvRLAt0vsEQdJtTDs');
 var update_period = 1000;
-var tweets_per_call = 1;
+var tweets_per_call = 3;
 var timeout = null;
 var old_tweets = [];
 
@@ -74,12 +81,11 @@ app.post("/event_name", function(req, res){
 	var event_name = req.body.event_name;
 	var keyword_array = req.body.keywords;
 	twitter_loop(event_name, keyword_array);
-	res.render("index");
+	sentiment.find({}).sort('-timestamp').limit(10).exec(function(err, sents){
+		res.render('index.ejs', { sentiments: sents });
+	});
 });
 
-app.get("/", function(req, res){
-	res.render("index");
-});
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
@@ -119,30 +125,37 @@ var search_tweets = function(event_name, keyword_array){
     });
 
     res.on('end', function(data){
-    	save_and_throttle(json_string, event_name);
+    	save_and_throttle(json_string);
   	});
   });  
+  
+  timeout = setTimeout(search_tweets, update_period, event_name);
+
 }
 
 var parse_twitter_date = function(text) {
 	return new Date(Date.parse(text.replace(/( +)/, ' UTC$1')));
 }
 
-var create_feedback = function(content, time){
-	 fb = new feedback({
-		body: content,
-		timestamp: time
+var create_sentiment = function(content, time){
+	alchemy.keywords(content, {sentiment: 1}, function(err, response){
+		if (!err){
+			var sent = new sentiment({
+				text: content,
+				timestamp: time,
+				keywords: response.keywords
+			});
+			sent.save(function(err, docs){
+				console.log(err);
+			});
+		}
 	});
-	fb.save(function(err, docs){
-		console.log(err);
-	});	
 }
 
 // Throttling functions
 
-var save_and_throttle = function(json_string, event_name){
+var save_and_throttle = function(json_string){
     var tweets = JSON.parse(json_string);
-    var last = tweets.statuses.length - 1
     var current_tweets = [];
 
     // Build a list of the tweets we just got from our 
@@ -155,7 +168,7 @@ var save_and_throttle = function(json_string, event_name){
     // Find the tweets in the list we just got that are
     // actually new (that we haven't seen before)
     var new_tweets = get_new_tweets(current_tweets, old_tweets);
-    // console.log(String(new_tweets.length) + " new tweets");
+    //console.log(String(new_tweets.length) + " new tweets");
 
     // Go through all new tweets and save them in the database
     for(var i = 0; i < new_tweets.length; i++){
@@ -163,16 +176,14 @@ var save_and_throttle = function(json_string, event_name){
       	var time = parse_twitter_date(tweet.created_at);
    		var content = tweet.text;
    		console.log("Time: "+time+" Content: "+tweet.text);
-   		create_feedback(content, time);
+   		create_sentiment(content, time);
 	}
 
 	// Throttle the rate of GET requests/the amount of tweets
 	// accessed per request using the old/new tweets list
    	throttle(current_tweets, old_tweets);
    	old_tweets = current_tweets; 
-   	// console.log("Update period: "+String(update_period));
-
-   	timeout = setTimeout(twitter_loop, update_period, event_name);
+   	console.log("Update period: "+String(update_period));
 
 }    
 
@@ -208,11 +219,11 @@ var get_new_tweets = function(current_tweets, old_tweets){
 	var dictionary = {};
 	var new_tweets = [];
 	for(var i = 0; i < old_tweets.length; i++){
-		dictionary[old_tweets[i]] = true;
+		dictionary[old_tweets[i].id] = true;
 	}
 
 	for(var j = 0; j < current_tweets.length; j++){
-		if(dictionary[current_tweets[j]] == undefined){
+		if(dictionary[current_tweets[j].id] == undefined){
 			new_tweets.push(current_tweets[j]);
 		}
 	}
