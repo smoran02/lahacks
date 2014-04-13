@@ -21,6 +21,10 @@ exports.feedback = function(req, res){
 				timestamp: Date.now(),
 				keywords: response.keywords
 			});
+			var twiml = new twilio.TwimlResponse();
+			twiml.message('Thanks! Your feedback has been recorded!');
+			res.type('text/xml');
+			res.send(twiml.toString());
 			sent.save(function(err, docs){
 				console.log(err);
 			});
