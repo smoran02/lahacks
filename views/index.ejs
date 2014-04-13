@@ -12,7 +12,7 @@
 	</style>
 
 </head>
-<body>
+<body onload="loadbg()">
 	<div class="navbar navbar-default navbar-fixed-top">
 		<div class="container">
 			<div class="navbar-header">
@@ -41,7 +41,7 @@
 		</div>
 	</div>
 
-	<div class="orange">
+	<div class="orange" id="thedivthing">
 		<div class="row">
 			<div class="col-md-6 col-md-push-3 centered">
 			<h3>Recent texts</h3>
@@ -66,8 +66,9 @@
 	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 	<script src="javascripts/jquery.curvycorners.min.js"></script>
 	<script src="javascripts/jquery.newsTicker.js"></script>
+	<script src="javascripts/jquery.backstretch.min.js"></script>
 	<script type="text/javascript">
-		$('.newsticker').newsTicker({ 
+		$('.newsticker').newsTicker ({ 
 			row_height: 200,
 		    max_rows: 2,
 		    speed: 3000,
@@ -76,6 +77,14 @@
 		    autostart: 1,
 		    pauseOnHover: 1
 		});
+		$(".orange").backstretch("images/pauley.jpg");
+	</script>
+	<script type="text/javascript">
+		function loadbg() {
+			var thing = document.getElementById("thedivthing");
+			thing.style.backgroundImage = 'url(images/pauley_cropped.jpg)';
+			thing.style.backgroundRepeat = "no-repeat";
+		}
 	</script>
 
 	<script>
