@@ -303,7 +303,9 @@ $(function () {
           enabled: true
       },
 
-      series: seriesArr
+      series: {
+      	data: seriesArr
+      }
         // type: 'spline',
         // pointStart: (new Date()).getTime(),
         // pointInterval: 3000,
