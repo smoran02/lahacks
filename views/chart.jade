@@ -1,16 +1,32 @@
 extends layout
 
 block content
+  script(src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1-beta1/jquery.js")
   script.
-    var data = !{JSON.stringify(data)};
+    //var data = !{JSON.stringify(data)};
+    var data2 = [
+      {
+        name: "hello this is a text",
+        x: Date.now(),
+        y: 0.5
+      },
+      {
+        name: "hello this is a text",
+        x: Date.now() + 200,
+        y: 0.5
+      },
+      {
+        name: "hello this is a text",
+        x: Date.now() + 20,
+        y: 0.5
+      }
+    ]
     var seriesArr = [];
     var titleArr = [];
-    for(x in data){
-      seriesArr.push({
-        name:x,
-        data:data[x]
-      });
+    for(x in data2){
+      seriesArr.push(x);
     }
+
   script(src="http://code.highcharts.com/highcharts.js")
   script(src="/javascripts/charting.js")
   #container

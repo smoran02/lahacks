@@ -178,7 +178,7 @@ var save_and_throttle = function(json_string){
     	var tweet = new_tweets[i];
       	var time = parse_twitter_date(tweet.created_at);
    		var content = tweet.text;
-   		console.log("Time: "+time+" Content: "+tweet.text);
+   		//console.log("Time: "+time+" Content: "+tweet.text);
    		create_sentiment(content, time);
 	}
 
@@ -186,7 +186,7 @@ var save_and_throttle = function(json_string){
 	// accessed per request using the old/new tweets list
    	throttle(current_tweets, old_tweets);
    	old_tweets = current_tweets; 
-   	console.log("Update period: "+String(update_period));
+   	//console.log("Update period: "+String(update_period));
 
 }    
 
