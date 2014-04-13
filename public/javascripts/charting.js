@@ -304,7 +304,8 @@ $(function () {
       },
 
       series: {
-      	data: seriesArr
+      	name: 'shit',
+      	data: [0, 0.3, 0.6, -1.0]
       }
         // type: 'spline',
         // pointStart: (new Date()).getTime(),
