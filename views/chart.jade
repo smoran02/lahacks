@@ -24,8 +24,7 @@ block content
     var seriesArr = [];
     var titleArr = [];
     for(x in data){
-      console.log(x);
-      seriesArr.push(x['y']);
+      seriesArr.push(x.y);
     }
 
   script(src="http://code.highcharts.com/highcharts.js")
