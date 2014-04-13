@@ -141,18 +141,18 @@ var parse_twitter_date = function(text) {
 }
 
 var create_sentiment = function(content, time){
-	alchemy.keywords(content, {sentiment: 1}, function(err, response){
-		if (!err){
-			var sent = new sentiment({
-				text: content,
-				timestamp: time,
-				keywords: response.keywords
-			});
-			sent.save(function(err, docs){
-				console.log(err);
-			});
-		}
-	});
+	// alchemy.keywords(content, {sentiment: 1}, function(err, response){
+	// 	if (!err){
+	// 		var sent = new sentiment({
+	// 			text: content,
+	// 			timestamp: time,
+	// 			keywords: response.keywords
+	// 		});
+	// 		sent.save(function(err, docs){
+	// 			console.log(err);
+	// 		});
+	// 	}
+	// });
 }
 
 // Throttling functions
