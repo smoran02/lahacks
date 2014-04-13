@@ -47,7 +47,10 @@ exports.keyword = function(req, res){
 			sents.forEach(function(sent){
 				var rel = parseFloat(sent.keywords[0].relevance, 10);
 				var s = parseFloat(sent.keywords[0].sentiment.score, 10);
-				var product = rel * rel * s;
+				var product = 0;
+				if (s){
+					product = rel * rel * s;
+				}
 				var node = {
 					text: sent.text,
 					timestamp: sent.timestamp,
