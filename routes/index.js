@@ -52,8 +52,8 @@ exports.keyword = function(req, res){
 				}
 				var node = {
 					text: sent.text,
-					timestamp: sent.timestamp,
-					sentiment: product
+					x: sent.timestamp,
+					y: product
 				}
 				data.push(node);
 			});
