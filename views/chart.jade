@@ -6,11 +6,11 @@ block content
     //var data = !{JSON.stringify(data)};
     var seriesArr = [];
     var titleArr = [];
-      
-    data.forEach(function(x){
+    console.log(data);
+    for(x in data){
       seriesArr.push({
         name:x.text,
-        data:sentiment
+        data:x.sentiment
       });
     }
   script(src="http://code.highcharts.com/highcharts.js")
