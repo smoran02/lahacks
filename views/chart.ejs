@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html lang = 'en'>
+<head>
+	<meta charset='utf-8'>
+	<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+	<title>Feedback App</title>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script src="http://code.highcharts.com/highcharts.js"></script>
+	<script type="text/javascript" src="http://www.highcharts.com/highslide/highslide-full.min.js"></script>
+	<script type="text/javascript" src="http://www.highcharts.com/highslide/highslide.config.js" charset="utf-8"></script>
+	<script src="charting.js"></script>
+	<link rel="stylesheet" type="text/css" href="http://www.highcharts.com/highslide/highslide.css" />
+</head>
+<body>
+	<div id="container" style="width:80%; height:80%; margin:auto">
+		<script>
+			var seriesArr = [];
+			for (d in data){
+				name: d.text,
+				data: d.sentiment
+			}
+			var counter = 0;
+			var total = 0;
+			function average(sentiment){
+			  total += sentiment;
+			  counter += 1;
+			  return total/counter;
+			}
+			$(function () {
+			  chart = new Highcharts.Chart({
+			      chart: {
+			        renderTo: 'container',
+			        zoomType: 'x'
+
+			      },
+			      title: {
+			            
+			      },
+			      subtitle: {
+			        text: document.ontouchstart === undefined ?
+			            'Click and drag in the plot area to zoom in' :
+			            'Pinch the chart to zoom in'
+			      },
+			      xAxis: {
+			        maxZoom: 600, // 1 minute
+			        title: {
+			            text: 'Time'
+			        }
+			      },
+			      yAxis: {
+			        title: {
+			            text: 'Weighted Sentiment'
+			        }
+			      },
+			      tooltip: {
+			        shared: true,
+			        formatter: function() {
+			            return '<b>' + 'Time: ' + '</b>' + data[counter]['timestamp'] + '<br>' + '<b>' + 'Text: ' + '</b>'
+			            + data[counter]['text'] + '<br>' + '<b>' + 'Sentiment: ' + '</b>' + data[counter]['sentiment'];
+			        }
+			      },
+			      legend: {
+			          enabled: true
+			      },
+
+			      series: seriesArr
+			        // type: 'spline',
+			        // pointStart: (new Date()).getTime(),
+			        // pointInterval: 3000,
+			  });
+			});
+		</script>
+	</div>
+</body>
+</html>
