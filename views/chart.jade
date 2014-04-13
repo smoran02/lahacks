@@ -21,11 +21,11 @@ block content
     //     y: 0.5
     //   }
     // ]
-    var seriesArr = data;
+    var seriesArr = [];
     var titleArr = [];
-    // for(x in data){
-    //   seriesArr.push(x);
-    // }
+    for(x in data){
+      seriesArr.push(x.y);
+    }
 
   script(src="http://code.highcharts.com/highcharts.js")
   script(src="/javascripts/charting.js")
