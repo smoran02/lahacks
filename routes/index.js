@@ -57,7 +57,7 @@ exports.keyword = function(req, res){
 				}
 				data.push(node);
 			});
-			res.render('chart.ejs', {data: data});
+			res.render('chart.jade', {data: data});
 	});
 }
 
