@@ -1,18 +1,10 @@
 //goddamnit
-var counter = 0;
-var total = 0;
 // var shit = [
 //   {
 //     "text": "Fuck da wifi",
 //     "timestamp": "2014-04-12T10:44:39.180Z",
 //     "sentiment": -0.6893254978901246
 //   }];
-
-function average(sentiment){
-  total += sentiment;
-  counter += 1;
-  return total/counter;
-}
 
 /**
  * Gray theme for Highcharts JS
@@ -267,49 +259,3 @@ Highcharts.theme = {
 // Apply the theme
 var highchartsOptions = Highcharts.setOptions(Highcharts.theme);
 
-$(function () {
-        chart = new Highcharts.Chart({
-            chart: {
-                renderTo: 'container',
-                zoomType: 'x'
-
-            },
-            title: {
-                text: 'LA Hacks Feedback'
-            },
-            subtitle: {
-                text: document.ontouchstart === undefined ?
-                    'Click and drag in the plot area to zoom in' :
-                    'Pinch the chart to zoom in'
-            },
-            xAxis: {
-                maxZoom: 600, // 1 minute
-                title: {
-                    text: 'Time'
-                }
-            },
-            yAxis: {
-                title: {
-                    text: 'Weighted Sentiment'
-                }
-            },
-            tooltip: {
-                shared: true,
-                formatter: function() {
-                    return '<b>' + 'Time: ' + '</b>' + data[counter]['timestamp'] + '<br>' + '<b>' + 'Text: ' + '</b>'
-                    + data[counter]['text'] + '<br>' + '<b>' + 'Sentiment: ' + '</b>' + data[counter]['sentiment'];
-                }
-            },
-            legend: {
-                enabled: true
-            },
-    
-            series: [{
-                type: 'spline',
-                pointStart: (new Date()).getTime(),
-                pointInterval: 3000,
-               data: [average(data[counter]['sentiment']), 0.3, 0, -1, 1]
-
-            }]
-        });
-    });
