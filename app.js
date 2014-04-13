@@ -18,6 +18,7 @@ mongoose.connect(uristring, function (err, res) {
   }
 });
 require('./models/feedback')(mongoose);
+var feedback = mongoose.model('Feedback');
 
 
 var routes = require('./routes');
@@ -38,8 +39,10 @@ var https = require('https');
 var bearer_token = null;
 var access_token_key = encodeURIComponent('ao4hRWSySVStN4fJoTi8g');
 var access_token_secret = encodeURIComponent('WhcBpUm30tvdsMffoWkTxh1GeuvRLAt0vsEQdJtTDs');
-var update_period = 10000;
+var update_period = 1000;
 var tweets_per_call = 1;
+var timeout = null;
+var old_tweets = [];
 
 
 
@@ -70,7 +73,7 @@ app.post('/feedback', routes.feedback);
 app.post("/event_name", function(req, res){
 	var event_name = req.body.event_name;
 	var keyword_array = req.body.keywords;
-	twitter_main(event_name, keyword_array);
+	twitter_loop(event_name, keyword_array);
 	res.render("index");
 });
 
@@ -84,7 +87,8 @@ http.createServer(app).listen(app.get('port'), function(){
 
 
 
-var twitter_main = function(event_name, keyword_array){
+var twitter_loop = function(event_name, keyword_array){
+  clearTimeout(timeout);
   var oauth2 = new OAuth2(access_token_key, access_token_secret, 'https://api.twitter.com/', null, 'oauth2/token', null);
   oauth2.getOAuthAccessToken('',
     {
@@ -92,7 +96,7 @@ var twitter_main = function(event_name, keyword_array){
     },
     function(e, access_token, args){
       bearer_token = access_token;
-      setInterval(search_tweets, update_period, event_name, keyword_array);
+      timeout = setTimeout(search_tweets, update_period, event_name, keyword_array);
     }
   );
 }
@@ -111,43 +115,118 @@ var search_tweets = function(event_name, keyword_array){
   https.get(options, function(res){
     var json_string = "";
     res.on('data', function(data){
-      /*console.log("\n\n\n\n\n");
-      console.log("Printing data: ")
-      console.log(String(data));*/
       json_string += String(data);
     });
 
     res.on('end', function(data){
-      var tweets = JSON.parse(json_string);
-      var last = tweets.statuses.length - 1
-      var last_tweet = tweets.statuses[last];
-
-      for(var i = 0; i < tweets.statuses.length; i++){
-      	var tweet = tweets.statuses[i];
-      	var time = parseTwitterDate(tweet.created_at);
-   		var content = tweet.text;
-   		console.log("Time: "+time+" Content: "+tweet.text);
-   		//post_sentiment(content, time);
-      }
-
-    });    
-
-  });
+    	save_and_throttle(json_string, event_name);
+  	});
+  });  
 }
 
-function parseTwitterDate(text) {
+var parse_twitter_date = function(text) {
 	return new Date(Date.parse(text.replace(/( +)/, ' UTC$1')));
 }
 
-var post_sentiment = function(text, time, from_twitter){
-	if(from_twitter){
-		// Post to mongoDB with anonymous = false, cause
-		// the information came from twitter
-		mongoose.post(text, time, false);
+var create_feedback = function(content, time){
+	 fb = new feedback({
+		body: content,
+		timestamp: time
+	});
+	fb.save(function(err, docs){
+		console.log(err);
+	});	
+}
+
+// Throttling functions
+
+var save_and_throttle = function(json_string, event_name){
+    var tweets = JSON.parse(json_string);
+    var last = tweets.statuses.length - 1
+    var current_tweets = [];
+
+    // Build a list of the tweets we just got from our 
+    // GET request to the search endpoint
+    for(var i = 0; i < tweets.statuses.length; i++){
+    	var tweet = tweets.statuses[i];
+    	current_tweets.push(tweet);    	
+    }
+
+    // Find the tweets in the list we just got that are
+    // actually new (that we haven't seen before)
+    var new_tweets = get_new_tweets(current_tweets, old_tweets);
+    // console.log(String(new_tweets.length) + " new tweets");
+
+    // Go through all new tweets and save them in the database
+    for(var i = 0; i < new_tweets.length; i++){
+    	var tweet = new_tweets[i];
+      	var time = parse_twitter_date(tweet.created_at);
+   		var content = tweet.text;
+   		console.log("Time: "+time+" Content: "+tweet.text);
+   		create_feedback(content, time);
+	}
+
+	// Throttle the rate of GET requests/the amount of tweets
+	// accessed per request using the old/new tweets list
+   	throttle(current_tweets, old_tweets);
+   	old_tweets = current_tweets; 
+   	// console.log("Update period: "+String(update_period));
+
+   	timeout = setTimeout(twitter_loop, update_period, event_name);
+
+}    
+
+var loop_faster = function(){
+	update_period *= 0.99;
+}
+
+var loop_slower = function(){
+	update_period *= 1.01;
+}
+
+var more_tweets = function(){
+	if(tweets_per_call >= 30){
+		loop_faster();
 	}
 	else{
-		mongoose.post(text, time, true);
+		tweets_per_call += 1;			
+	}
+}
+
+var fewer_tweets = function(){
+	if(tweets_per_call == 1){
+		loop_slower()	
+	}
+	else{
+		tweets_per_call -= 1;		
+	}
+	
+}
+
+// Returns the elements of current_tweets not in old_tweets
+var get_new_tweets = function(current_tweets, old_tweets){
+	var dictionary = {};
+	var new_tweets = [];
+	for(var i = 0; i < old_tweets.length; i++){
+		dictionary[old_tweets[i]] = true;
+	}
+
+	for(var j = 0; j < current_tweets.length; j++){
+		if(dictionary[current_tweets[j]] == undefined){
+			new_tweets.push(current_tweets[j]);
+		}
+	}
+
+	return new_tweets;
+}
+
+var throttle = function(current_tweets, old_tweets){
+	var new_tweets = get_new_tweets(current_tweets, old_tweets);
+	if(new_tweets.length < current_tweets.length){
+		fewer_tweets();
+	}
+	else if(new_tweets.length > current_tweets.length){
+		more_tweets();
 	}
 
 }
-
